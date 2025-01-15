@@ -1,24 +1,24 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
   cmd = "Neotree",
-  keys = {
-    {
-      "<leader>fe",
-      function()
-        require("neo-tree.command").execute({ toggle = true, dir = require("lazyvim.util").root.get() })
-      end,
-      desc = "Explorer NeoTree (root dir)",
-    },
-    {
-      "<leader>fE",
-      function()
-        require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
-      end,
-      desc = "Explorer NeoTree (cwd)",
-    },
-    { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
-    { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+keys = {
+  {
+    "<leader>fe",
+    function()
+      require("neo-tree.command").execute({ toggle = true, dir = vim.fn.getcwd() })
+    end,
+    desc = "Explorer NeoTree (monorepo root)",
   },
+  {
+    "<leader>fE",
+    function()
+      require("neo-tree.command").execute({ toggle = true, dir = vim.fn.getcwd() })
+    end,
+    desc = "Explorer NeoTree (monorepo root)",
+  },
+  { "<leader>e", "<leader>fe", desc = "Explorer NeoTree (root dir)", remap = true },
+  { "<leader>E", "<leader>fE", desc = "Explorer NeoTree (cwd)", remap = true },
+},
   deactivate = function()
     vim.cmd([[Neotree close]])
   end,
@@ -34,10 +34,15 @@ return {
     sources = { "filesystem", "buffers", "git_status", "document_symbols" },
     open_files_do_not_replace_types = { "terminal", "Trouble", "qf", "Outline" },
     filesystem = {
-      bind_to_cwd = false,
+      bind_to_cwd = true,
       follow_current_file = { enabled = true },
       use_libuv_file_watcher = true,
       hijack_netrw_behavior = "disabled",
+        filtered_items = {
+      visible = true, -- Faz com que os itens ocultos fiquem visíveis
+      hide_dotfiles = false, -- Mostra arquivos e pastas que começam com "."
+      hide_gitignored = false, -- Mostra arquivos ignorados pelo Git
+    },
     },
     commands = {
       system_open = function(state)
